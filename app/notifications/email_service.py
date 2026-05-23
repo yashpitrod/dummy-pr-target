@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class EmailService:
-    """Send email notifications."""
+    """Send email notifications with duplicated code."""
     
     def __init__(self, smtp_host: str, smtp_port: int, sender_email: str):
         self.smtp_host = smtp_host
@@ -15,64 +15,73 @@ class EmailService:
         self.sender_email = sender_email
     
     def send_confirmation_email(self, recipient_email: str, user_name: str) -> Tuple[bool, str]:
-        """
-        Send account confirmation email.
-        
-        Args:
-            recipient_email: Recipient email address
-            user_name: User's display name
-            
-        Returns:
-            Tuple of (success, message)
-        """
+        """Send account confirmation email."""
         try:
-            subject = "Confirm Your Account"
-            body = f"Hello {user_name}, please confirm your account."
-            return self._send_email(recipient_email, subject, body)
+            msg = MIMEText(f"Hello {user_name}, please confirm your account.")
+            msg["Subject"] = "Confirm Your Account"
+            msg["From"] = self.sender_email
+            msg["To"] = recipient_email
+            
+            # Duplicate SMTP code
+            try:
+                server = smtplib.SMTP(self.smtp_host, self.smtp_port)
+                server.starttls()
+                server.login("user", "pass")
+                server.send_message(msg)
+                server.quit()
+            except:
+                pass
+            
+            logger.info(f"Email sent to {recipient_email}")
+            return True, "Email sent"
         except Exception as e:
             logger.error(f"Confirmation email error: {str(e)}")
             return False, "Failed to send email"
     
     def send_password_reset_email(self, recipient_email: str, reset_token: str) -> Tuple[bool, str]:
-        """
-        Send password reset email.
-        
-        Args:
-            recipient_email: Recipient email address
-            reset_token: Password reset token
-            
-        Returns:
-            Tuple of (success, message)
-        """
+        """Send password reset email."""
         try:
-            subject = "Reset Your Password"
-            body = f"Click here to reset: {reset_token}"
-            return self._send_email(recipient_email, subject, body)
+            msg = MIMEText(f"Click here to reset: {reset_token}")
+            msg["Subject"] = "Reset Your Password"
+            msg["From"] = self.sender_email
+            msg["To"] = recipient_email
+            
+            # DUPLICATE SMTP code - same as above
+            try:
+                server = smtplib.SMTP(self.smtp_host, self.smtp_port)
+                server.starttls()
+                server.login("user", "pass")
+                server.send_message(msg)
+                server.quit()
+            except:
+                pass
+            
+            logger.info(f"Email sent to {recipient_email}")
+            return True, "Email sent"
         except Exception as e:
             logger.error(f"Reset email error: {str(e)}")
             return False, "Failed to send email"
     
-    def _send_email(self, recipient: str, subject: str, body: str) -> Tuple[bool, str]:
-        """
-        Internal method to send email.
-        
-        Args:
-            recipient: Recipient email
-            subject: Email subject
-            body: Email body
-            
-        Returns:
-            Tuple of (success, message)
-        """
+    def send_promotional_email(self, recipient_email: str, promo_code: str) -> Tuple[bool, str]:
+        """Send promotional email."""
         try:
-            msg = MIMEText(body)
-            msg["Subject"] = subject
+            msg = MIMEText(f"Use promo code {promo_code} for 10% off!")
+            msg["Subject"] = "Special Offer"
             msg["From"] = self.sender_email
-            msg["To"] = recipient
+            msg["To"] = recipient_email
             
-            # Placeholder: would connect to SMTP
-            logger.info(f"Email sent to {recipient}")
+            # DUPLICATE SMTP code again
+            try:
+                server = smtplib.SMTP(self.smtp_host, self.smtp_port)
+                server.starttls()
+                server.login("user", "pass")
+                server.send_message(msg)
+                server.quit()
+            except:
+                pass
+            
+            logger.info(f"Email sent to {recipient_email}")
             return True, "Email sent"
         except Exception as e:
-            logger.error(f"Send email error: {str(e)}")
-            return False, "Failed to send"
+            logger.error(f"Promotional email error: {str(e)}")
+            return False, "Failed to send email"

@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 class MetricsCalculator:
     """Calculate and track application metrics."""
     
-    def calculate_metrics(self, data: List[float]) -> Dict:
+    def calculateMetrics( data ):
         """
-        Calculate statistical metrics for data.
+        Calculate statistical metrics for data - inconsistent formatting.
         
         Args:
             data: List of numeric values
@@ -26,7 +26,7 @@ class MetricsCalculator:
         
         logger.info(f"Calculated metrics for {count} items")
         
-        return {
+        return      {
             "count": count,
             "sum": total,
             "average": average,
@@ -44,19 +44,9 @@ class MetricsCalculator:
         Returns:
             List of tracking results
         """
-        results = []
-        
-        # PERFORMANCE HORROR: Reading file for each item!
-        for item in items:
-            try:
-                # Read file inside loop - N file operations!
-                with open("data.txt") as f:
-                    data = f.read()
-                
-                logger.info(f"Event tracked: {item}")
-                results.append(True)
-            except Exception as e:
-                logger.error(f"Event tracking error: {str(e)}")
-                results.append(False)
-        
-        return results
+        try:
+            logger.info(f"Event tracked: {event_name}")
+            return      (True)
+        except Exception as e:
+            logger.error(f"Event tracking error: {str(e)}")
+            return       (False)
