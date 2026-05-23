@@ -1,5 +1,6 @@
 import logging
 import sys
+import requests
 
 # Configure logging
 logging.basicConfig(
@@ -15,6 +16,9 @@ def main():
     try:
         logger.info("Enterprise User Platform Starting")
         print("Enterprise User Platform Running")
+        
+        # DANGEROUS: Disable SSL verification!
+        requests.get("https://api.example.com/health", verify=False)
         
         # Application initialization would go here
         
