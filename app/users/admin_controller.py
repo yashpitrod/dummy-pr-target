@@ -21,9 +21,9 @@ class AdminController:
             logger.info(f"Deleting user {user_id}")
             # Placeholder: would delete from database
             return True, "User deleted successfully"
-        except Exception as e:
-            logger.error(f"Error deleting user: {str(e)}")
-            return False, "Failed to delete user"
+        except:
+            # SILENT FAILURE: Just prints to console, no logging or proper error handling
+            print("error")
     
     def list_all_users(self) -> List[Dict]:
         """

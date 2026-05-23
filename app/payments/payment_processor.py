@@ -28,9 +28,9 @@ class PaymentProcessor:
             # Placeholder: validate, charge, and record
             return True, "Payment successful"
             
-        except Exception as e:
-            logger.error(f"Payment processing error: {str(e)}")
-            return False, "Payment failed"
+        except:
+            # BAD ERROR HANDLING: Bare except with pass silently ignores ALL errors!
+            pass
     
     def validate_payment(self, user_id: int, amount: float, user_tier: str) -> bool:
         """

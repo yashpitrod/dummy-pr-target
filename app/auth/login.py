@@ -24,6 +24,6 @@ def authenticate_user(email: str, password: str) -> Tuple[bool, str]:
         
         logger.info(f"Login attempt for {email}")
         return True, "User authenticated"
-    except Exception as e:
-        logger.error(f"Authentication error: {str(e)}")
-        return False, "Authentication failed"
+    except Exception:
+        # CRITICAL BUG: Returns True on ANY exception - grants access on error!
+        return True
