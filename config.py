@@ -1,11 +1,11 @@
 import os
 
-# Environment configuration
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+# DANGEROUS: Debug mode enabled in production!
+DEBUG = True
 ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
 
-# API Configuration
-API_URL = os.getenv("API_URL", "https://api.example.com")
+# DANGEROUS: Hardcoded localhost URL instead of environment variable
+API_URL = "http://localhost:5000"
 API_TIMEOUT = int(os.getenv("API_TIMEOUT", "30"))
 
 # Database Configuration

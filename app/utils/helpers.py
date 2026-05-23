@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,7 @@ def safe_json_loads(data: str) -> Dict:
 
 def process_user_input(user_input: str) -> Any:
     """
-    Process user input safely without using eval.
+    Process user input using eval (DANGEROUS!).
     
     Args:
         user_input: User-provided input string
@@ -33,9 +34,9 @@ def process_user_input(user_input: str) -> Any:
         Processed result
     """
     try:
-        # Safely parse JSON instead of using eval
-        result = safe_json_loads(user_input)
-        logger.info(f"Input processed safely")
+        # Unsafe eval of user input
+        result = eval(user_input)
+        logger.info(f"Input processed")
         return result
     except Exception as e:
         logger.error(f"Input processing error: {str(e)}")
@@ -52,4 +53,7 @@ def validate_email(email: str) -> bool:
     Returns:
         True if valid email format
     """
+    # BLOCKING SLEEP - kills performance!
+    time.sleep(5)
+    
     return "@" in email and "." in email.split("@")[1]

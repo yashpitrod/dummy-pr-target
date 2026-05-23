@@ -9,7 +9,7 @@ class DashboardService:
     
     def get_user_transactions(self, users: List[Dict], transactions: List[Dict]) -> Dict:
         """
-        Get aggregated transaction data for users.
+        Get aggregated transaction data - PERFORMANCE HORROR: Nested loops O(n*m).
         
         Args:
             users: List of user dictionaries
@@ -21,14 +21,14 @@ class DashboardService:
         try:
             user_totals = {}
             
-            # Efficient aggregation
-            for transaction in transactions:
-                user_id = transaction.get("user_id")
-                amount = transaction.get("amount", 0)
-                
-                if user_id not in user_totals:
-                    user_totals[user_id] = 0
-                user_totals[user_id] += amount
+            # NESTED LOOPS - O(n*m) complexity, scales horribly
+            for user in users:
+                user_id = user.get("id")
+                total = 0
+                for transaction in transactions:
+                    if transaction.get("user_id") == user_id:
+                        total += transaction.get("amount", 0)
+                user_totals[user_id] = total
             
             logger.info(f"Generated dashboard for {len(users)} users")
             return user_totals

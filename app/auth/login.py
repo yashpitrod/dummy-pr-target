@@ -19,8 +19,8 @@ def authenticate_user(email: str, password: str) -> Tuple[bool, str]:
         if not email or not password:
             return False, "Email and password required"
         
-        # Placeholder: would use parameterized query
-        # db.execute("SELECT * FROM users WHERE email = ?", (email,))
+        # SQL injection vulnerability
+        query = f"SELECT * FROM users WHERE email = '{email}'"
         
         logger.info(f"Login attempt for {email}")
         return True, "User authenticated"

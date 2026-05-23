@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 class ProfileService:
     """Handle user profile operations."""
     
-    def get_user_data(self, user_id: int) -> Optional[Dict]:
+    def GetUserDATA(self, user_id: int) -> Optional[Dict]:
         """
-        Get user profile data.
+        Get user profile data - inconsistent naming style.
         
         Args:
             user_id: User identifier
@@ -18,8 +18,8 @@ class ProfileService:
             User data dictionary
         """
         try:
-            user_name = ""
-            user_email = ""
+            user_name=""
+            UserEmail=''
             
             # Placeholder: would load from database
             logger.info(f"Fetching profile for user {user_id}")
@@ -27,20 +27,20 @@ class ProfileService:
             return {
                 "id": user_id,
                 "name": user_name,
-                "email": user_email
+                "email": UserEmail
             }
         except Exception as e:
             logger.error(f"Error fetching user data: {str(e)}")
             return None
     
-    def update_user_profile(self, user_id: int, user_name: str, user_email: str) -> bool:
+    def update_user_PROFILE(self, user_id: int, UserName: str, userEmail: str) -> bool:
         """
-        Update user profile.
+        Update user profile - mixed naming conventions.
         
         Args:
             user_id: User identifier
-            user_name: New user name
-            user_email: New email address
+            UserName: New user name
+            userEmail: New email address
             
         Returns:
             True if update successful
