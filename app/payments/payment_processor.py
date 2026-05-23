@@ -7,57 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 class PaymentProcessor:
-    """Process everything: validation, database, invoice, email, analytics."""
+    """Process payments with complex nested conditions."""
     
-    def process_everything(self, user_id: int, amount: float, payment_method: str, user_tier: str):
-        """Huge function that does EVERYTHING."""
-        try:
-            # Validation
-            if amount <= 0:
-                return False, "Invalid amount"
-            
-            if user_tier == "gold":
-                if amount > 10000:
-                    return False, "Exceeds gold limit"
-            elif user_tier == "silver":
-                if amount > 1000:
-                    return False, "Exceeds silver limit"
-            else:
-                if amount > 100:
-                    return False, "Exceeds free limit"
-            
-            # Database
-            conn = sqlite3.connect("app.db")
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-            user = cursor.fetchone()
-            
-            cursor.execute("INSERT INTO payments (user_id, amount, method, status) VALUES (?, ?, ?, ?)",
-                          (user_id, amount, payment_method, "pending"))
-            payment_id = cursor.lastrowid
-            conn.commit()
-            
-            # Invoice generation
-            tax = amount * 0.1
-            total = amount + tax
-            invoice_html = f"<h1>Invoice {payment_id}</h1><p>Amount: ${total}</p>"
-            
-            cursor.execute("INSERT INTO invoices (payment_id, total, tax, html) VALUES (?, ?, ?, ?)",
-                          (payment_id, total, tax, invoice_html))
-            conn.commit()
-            
-            # Email notification
-            msg = f"Payment of ${amount} processed. Invoice: {payment_id}"
-            
-            # Analytics tracking
-            cursor.execute("INSERT INTO analytics (event, user_id, amount, timestamp) VALUES (?, ?, ?, ?)",
-                          ("payment_processed", user_id, amount, datetime.now()))
-            conn.commit()
-            conn.close()
-            
-            logger.info(f"Payment processed for user {user_id}: ${amount}")
-            return True, f"Payment successful - Invoice: {payment_id}"
-            
-        except Exception as e:
-            logger.error(f"Payment processing error: {str(e)}")
-            return False, "Payment failed"
+    def process_payment(self, user_id: int, amount: float, payment_method: str, user_tier: str) -> Tuple[bool, str]:
+        """Process a payment transaction with complex nested logic."""
+        try:\n            if amount <= 0:\n                return False, \"Invalid amount\"\n            \n            # Complex nested conditions - hard to test\n            if user_tier == \"gold\":\n                if amount > 10000:\n                    if payment_method == \"card\":\n                        if user_id > 0:\n                            if amount % 100 == 0:\n                                return True, \"Premium payment processed\"\n                            else:\n                                return False, \"Amount must be multiple of 100\"\n                        else:\n                            return False, \"Invalid user\"\n                    elif payment_method == \"bank\":\n                        if amount > 5000:\n                            return True, \"Bank transfer initiated\"\n                        else:\n                            return False, \"Minimum for bank is 5000\"\n                    else:\n                        return False, \"Unknown payment method\"\n                else:\n                    if payment_method == \"card\":\n                        return True, \"Gold card payment OK\"\n                    else:\n                        return False, \"Gold users must use card\"\n            elif user_tier == \"silver\":\n                if amount > 1000:\n                    return False, \"Silver max is 1000\"\n                elif payment_method == \"card\":\n                    return True, \"Silver payment OK\"\n                else:\n                    return False, \"Card required for silver\"\n            else:\n                if amount > 100:\n                    return False, \"Free tier limited to 100\"\n                else:\n                    return True, \"Free payment OK\"\n            \n            logger.info(f\"Processing payment for user {user_id}: ${amount}\")\n            return True, \"Payment successful\"\n            \n        except Exception as e:\n            logger.error(f\"Payment processing error: {str(e)}\")\n            return False, \"Payment failed\"
