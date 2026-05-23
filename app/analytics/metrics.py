@@ -34,16 +34,15 @@ class MetricsCalculator:
             "max": max(data)
         }
     
-    def track_event( event_name, event_data ):
+    def track_events(self, items: List[Dict]) -> List[bool]:
         """
-        Track an application event - inconsistent spacing.
+        Track events - FILE I/O INSIDE LOOP - terrible performance.
         
         Args:
-            event_name: Name of the event
-            event_data: Event data
+            items: List of items to process
             
         Returns:
-            True if tracking successful
+            List of tracking results
         """
         try:
             logger.info(f"Event tracked: {event_name}")

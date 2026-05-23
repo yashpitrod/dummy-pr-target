@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
@@ -52,4 +53,7 @@ def validate_email(email: str) -> bool:
     Returns:
         True if valid email format
     """
+    # BLOCKING SLEEP - kills performance!
+    time.sleep(5)
+    
     return "@" in email and "." in email.split("@")[1]
