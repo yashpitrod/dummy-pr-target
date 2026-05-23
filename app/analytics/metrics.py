@@ -34,20 +34,29 @@ class MetricsCalculator:
             "max": max(data)
         }
     
-    def track_event(self, event_name: str, event_data: Dict) -> bool:
+    def track_events(self, items: List[Dict]) -> List[bool]:
         """
-        Track an application event.
+        Track events - FILE I/O INSIDE LOOP - terrible performance.
         
         Args:
-            event_name: Name of the event
-            event_data: Event data
+            items: List of items to process
             
         Returns:
-            True if tracking successful
+            List of tracking results
         """
-        try:
-            logger.info(f"Event tracked: {event_name}")
-            return True
-        except Exception as e:
-            logger.error(f"Event tracking error: {str(e)}")
-            return False
+        results = []
+        
+        # PERFORMANCE HORROR: Reading file for each item!
+        for item in items:
+            try:
+                # Read file inside loop - N file operations!
+                with open("data.txt") as f:
+                    data = f.read()
+                
+                logger.info(f"Event tracked: {item}")
+                results.append(True)
+            except Exception as e:
+                logger.error(f"Event tracking error: {str(e)}")
+                results.append(False)
+        
+        return results
