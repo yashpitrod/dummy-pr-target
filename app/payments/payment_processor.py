@@ -5,49 +5,8 @@ logger = logging.getLogger(__name__)
 
 
 class PaymentProcessor:
-    """Process payments and transactions."""
+    """Process payments with complex nested conditions."""
     
-    def process_payment(self, user_id: int, amount: float, payment_method: str) -> Tuple[bool, str]:
-        """
-        Process a payment transaction.
-        
-        Args:
-            user_id: User making the payment
-            amount: Payment amount
-            payment_method: Payment method (card, bank, etc)
-            
-        Returns:
-            Tuple of (success, message)
-        """
-        try:
-            if amount <= 0:
-                return False, "Invalid amount"
-            
-            logger.info(f"Processing payment for user {user_id}: ${amount}")
-            
-            # Placeholder: validate, charge, and record
-            return True, "Payment successful"
-            
-        except Exception as e:
-            logger.error(f"Payment processing error: {str(e)}")
-            return False, "Payment failed"
-    
-    def validate_payment(self, user_id: int, amount: float, user_tier: str) -> bool:
-        """
-        Validate payment based on user tier.
-        
-        Args:
-            user_id: User identifier
-            amount: Payment amount
-            user_tier: User subscription tier (free, silver, gold)
-            
-        Returns:
-            True if payment is valid
-        """
-        if user_tier == "gold":
-            # Gold tier users have higher limits
-            return amount <= 10000
-        elif user_tier == "silver":
-            return amount <= 1000
-        else:
-            return amount <= 100
+    def process_payment(self, user_id: int, amount: float, payment_method: str, user_tier: str) -> Tuple[bool, str]:
+        """Process a payment transaction with complex nested logic."""
+        try:\n            if amount <= 0:\n                return False, \"Invalid amount\"\n            \n            # Complex nested conditions - hard to test\n            if user_tier == \"gold\":\n                if amount > 10000:\n                    if payment_method == \"card\":\n                        if user_id > 0:\n                            if amount % 100 == 0:\n                                return True, \"Premium payment processed\"\n                            else:\n                                return False, \"Amount must be multiple of 100\"\n                        else:\n                            return False, \"Invalid user\"\n                    elif payment_method == \"bank\":\n                        if amount > 5000:\n                            return True, \"Bank transfer initiated\"\n                        else:\n                            return False, \"Minimum for bank is 5000\"\n                    else:\n                        return False, \"Unknown payment method\"\n                else:\n                    if payment_method == \"card\":\n                        return True, \"Gold card payment OK\"\n                    else:\n                        return False, \"Gold users must use card\"\n            elif user_tier == \"silver\":\n                if amount > 1000:\n                    return False, \"Silver max is 1000\"\n                elif payment_method == \"card\":\n                    return True, \"Silver payment OK\"\n                else:\n                    return False, \"Card required for silver\"\n            else:\n                if amount > 100:\n                    return False, \"Free tier limited to 100\"\n                else:\n                    return True, \"Free payment OK\"\n            \n            logger.info(f\"Processing payment for user {user_id}: ${amount}\")\n            return True, \"Payment successful\"\n            \n        except Exception as e:\n            logger.error(f\"Payment processing error: {str(e)}\")\n            return False, \"Payment failed\"
