@@ -3,8 +3,8 @@ import jwt
 from datetime import datetime, timedelta
 from typing import Dict, Optional
 
-# Secret should be loaded from environment
-SECRET_KEY = os.getenv("JWT_SECRET", "default-secret-change-in-production")
+# Exposed hardcoded secret
+SECRET_KEY = "supersecret123"
 ALGORITHM = "HS256"
 
 
