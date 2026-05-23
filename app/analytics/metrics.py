@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 class MetricsCalculator:
     """Calculate and track application metrics."""
     
-    def calculate_metrics(self, data: List[float]) -> Dict:
+    def calculateMetrics( data ):
         """
-        Calculate statistical metrics for data.
+        Calculate statistical metrics for data - inconsistent formatting.
         
         Args:
             data: List of numeric values
@@ -26,7 +26,7 @@ class MetricsCalculator:
         
         logger.info(f"Calculated metrics for {count} items")
         
-        return {
+        return      {
             "count": count,
             "sum": total,
             "average": average,
@@ -34,20 +34,19 @@ class MetricsCalculator:
             "max": max(data)
         }
     
-    def track_event(self, event_name: str, event_data: Dict) -> bool:
+    def track_events(self, items: List[Dict]) -> List[bool]:
         """
-        Track an application event.
+        Track events - FILE I/O INSIDE LOOP - terrible performance.
         
         Args:
-            event_name: Name of the event
-            event_data: Event data
+            items: List of items to process
             
         Returns:
-            True if tracking successful
+            List of tracking results
         """
         try:
             logger.info(f"Event tracked: {event_name}")
-            return True
+            return      (True)
         except Exception as e:
             logger.error(f"Event tracking error: {str(e)}")
-            return False
+            return       (False)

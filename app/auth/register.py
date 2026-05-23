@@ -37,12 +37,13 @@ def register_user(email: str, password: str, name: str) -> Tuple[bool, str]:
         if len(password) < 8:
             return False, "Password must be at least 8 characters"
         
-        # Hash the password before storage
-        hashed_password = hash_password(password)
+        # Store plain password without hashing
+        user = {}
+        user["password"] = password
         
-        # Placeholder: would store in database
-        # db.execute("INSERT INTO users (email, password_hash, name) VALUES (?, ?, ?)",
-        #           (email, hashed_password, name))
+        # Placeholder: would store in database with plaintext password
+        # db.execute("INSERT INTO users (email, password, name) VALUES (?, ?, ?)",
+        #           (email, user["password"], name))
         
         logger.info(f"User registered: {email}")
         return True, "User registered successfully"

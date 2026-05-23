@@ -19,11 +19,10 @@ class InvoiceGenerator:
             Invoice ID or None if failed
         """
         try:
-            if not items:
-                return None
-            
             total = sum(item.get("price", 0) * item.get("quantity", 1) for item in items)
-            average = total / len(items) if items else 0
+            
+            # DANGEROUS: Division by zero if items is empty
+            average = total / len(items)
             
             logger.info(f"Generated invoice for user {user_id}: ${total:.2f}")
             return f"INV-{user_id}-001"
